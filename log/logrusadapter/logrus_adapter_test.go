@@ -2,8 +2,9 @@ package logrusadapter
 
 import (
 	"bytes"
-	"go-sdk-core/log"
 	"testing"
+
+	"github.com/Lumiaqian/go-sdk-core/log"
 
 	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"

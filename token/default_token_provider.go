@@ -2,9 +2,10 @@ package token
 
 import (
 	"context"
-	"go-sdk-core/cache"
 	"sync"
 	"time"
+
+	"github.com/Lumiaqian/go-sdk-core/cache"
 )
 
 type DefaultTokenProvider struct {

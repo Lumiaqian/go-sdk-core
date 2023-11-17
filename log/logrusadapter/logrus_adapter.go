@@ -1,7 +1,7 @@
 package logrusadapter
 
 import (
-	"go-sdk-core/log"
+	"github.com/Lumiaqian/go-sdk-core/log"
 
 	"github.com/sirupsen/logrus"
 )

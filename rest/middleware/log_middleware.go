@@ -3,11 +3,12 @@ package middleware
 import (
 	"bytes"
 	"context"
-	"go-sdk-core/log"
-	"go-sdk-core/rest"
 	"io"
 	"net/http"
 	"time"
+
+	"github.com/Lumiaqian/go-sdk-core/log"
+	"github.com/Lumiaqian/go-sdk-core/rest"
 )
 
 type LogMiddleware struct {

@@ -1,4 +1,4 @@
-module go-sdk-core
+module github.com/Lumiaqian/go-sdk-core
 
 go 1.21.4
 
