@@ -5,16 +5,16 @@ import (
 )
 
 type TokenProvider interface {
-	// GetAccessToken 从缓存或远程服务器获取access token。
+	// GetAccessToken retrieves the access token from either the cache or the remote server.
 	GetAccessToken(ctx context.Context) (string, error)
 
-	// RefreshAccessToken 强制刷新access token，无论当前token是否已过期。
+	// RefreshAccessToken forcefully refreshes the access token, regardless of its expiration status.
 	RefreshAccessToken(ctx context.Context) (string, error)
 }
 
 type TokenFetcher interface {
-	// FetchToken 从远程服务器获取access token
+	// FetchToken retrieves an access token from a remote server
 	FetchToken(ctx context.Context) (token string, expiry int64, err error)
-	// GenerateCacheKey 生成缓存key
+	// GenerateCacheKey generates a cache key
 	GenerateCacheKey() string
 }

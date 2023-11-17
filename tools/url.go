@@ -12,6 +12,7 @@ func AddParamsToURL(baseURL string, params map[string]string) (string, error) {
 	for key, value := range params {
 		query.Add(key, value)
 	}
+
 	u.RawQuery = query.Encode()
 	return u.String(), nil
 }

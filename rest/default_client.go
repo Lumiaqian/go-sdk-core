@@ -29,26 +29,29 @@ func (c *DefaultHttpClient) DoRequest(ctx context.Context, method, url string, h
 	if payload == nil {
 		return nil, errors.New("payload cannot be nil")
 	}
-	// 创建一个新的 HTTP 请求
+
+	// Create a new HTTP request
 	req, err := http.NewRequestWithContext(ctx, method, url, payload.Body)
 	if err != nil {
 		return nil, err
 	}
 
-	// 添加 headers
+	// Add headers
 	for key, value := range headers {
 		req.Header.Add(key, value)
 	}
 
-	// 如果存在表单字段或文件字段，则处理 multipart/form-data
+	// Handle multipart/form-data if there are form fields or file fields
 	if len(payload.FormFields) > 0 || len(payload.FileFields) > 0 {
 		buffer := &bytes.Buffer{}
 		writer := multipart.NewWriter(buffer)
 
+		// Write form fields
 		for field, value := range payload.FormFields {
 			writer.WriteField(field, value)
 		}
 
+		// Write file fields
 		for field, file := range payload.FileFields {
 			fileWriter, err := writer.CreateFormFile(field, file.Filename)
 			if err != nil {
@@ -60,25 +63,30 @@ func (c *DefaultHttpClient) DoRequest(ctx context.Context, method, url string, h
 			}
 		}
 
-		writer.Close()
+		// Close the writer
+		err = writer.Close()
+		if err != nil {
+			return nil, err
+		}
+
 		req.Body = io.NopCloser(buffer)
 		req.Header.Set("Content-Type", writer.FormDataContentType())
 	}
 
-	// 发送请求
+	// Send the request
 	resp, err := c.executeMiddlewares(ctx, req, 0)
 	if err != nil {
 		return nil, err
 	}
 
-	// 读取响应体
+	// Read the response body
 	body, err := io.ReadAll(resp.Body)
+	resp.Body.Close()
 	if err != nil {
 		return nil, err
 	}
-	resp.Body.Close()
 
-	// 返回自定义的 HttpResponse 结构
+	// Return a custom HttpResponse structure
 	return &HttpResponse{
 		StatusCode:  resp.StatusCode,
 		Body:        body,
@@ -89,11 +97,11 @@ func (c *DefaultHttpClient) DoRequest(ctx context.Context, method, url string, h
 
 func (c *DefaultHttpClient) executeMiddlewares(ctx context.Context, req *http.Request, index int) (*http.Response, error) {
 	if index >= len(c.middlewares) {
-		return c.client.Do(req) // 如果没有其他中间件要执行，则直接发送请求
+		return c.client.Do(req) // If there are no other middlewares to execute, send the request directly
 	}
 
-	middleware := c.middlewares[index]
-	return middleware.Handle(ctx, req, func(ctx context.Context, req *http.Request) (*http.Response, error) {
-		return c.executeMiddlewares(ctx, req, index+1) // 调用下一个中间件
+	// Execute the current middleware and pass in a callback function to call the next middleware
+	return c.middlewares[index].Handle(ctx, req, func(ctx context.Context, req *http.Request) (*http.Response, error) {
+		return c.executeMiddlewares(ctx, req, index+1)
 	})
 }

@@ -7,14 +7,14 @@ import (
 )
 
 type RequestPayload struct {
-	Body       io.Reader            // 用于普通的请求体，如 JSON 或 XML
-	FormFields map[string]string    // 普通的表单字段
-	FileFields map[string]FileField // 文件字段
+	Body       io.Reader            // request body
+	FormFields map[string]string    // form fields
+	FileFields map[string]FileField // file fields
 }
 
 type FileField struct {
-	Filename string    // 文件名
-	Content  io.Reader // 文件内容
+	Filename string    // file name
+	Content  io.Reader // file content
 }
 
 type HttpResponse struct {
