@@ -40,7 +40,7 @@ func (m *LogMiddleware) Handle(ctx context.Context, req *http.Request, next rest
 		m.logger.Log(log.INFO, "response_body", bodyBytes)
 	}
 	// log after request
-	m.logger.Log(log.INFO, "request_end", "method", req.Method, "url", req.URL.String(), "duration", time.Since(start).String())
+	m.logger.Log(log.INFO, "request_end", "", "method", req.Method, "url", req.URL.String(), "duration", time.Since(start).String())
 
 	return resp, err
 }
