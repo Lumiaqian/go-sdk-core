@@ -24,15 +24,15 @@ func TestLogrusAdapter_Log(t *testing.T) {
 	// Test different log levels
 	testCases := []struct {
 		level    log.Level
-		keyvals  []interface{}
+		keyvals  []any
 		expected string
 		message  string
 	}{
-		{log.DEBUG, []interface{}{"message", "debug message"}, "debug message", "Debug level test"},
-		{log.INFO, []interface{}{"message", "info message"}, "info message", "Info level test"},
-		{log.WARN, []interface{}{"message", "warn message"}, "warn message", "Warn level test"},
-		{log.ERROR, []interface{}{"message", "error message"}, "error message", "Error level test"},
-		{log.FATAL, []interface{}{"message", "fatal message"}, "fatal message", "Fatal level test"},
+		{log.DEBUG, []any{"message", "debug message"}, "debug message", "Debug level test"},
+		{log.INFO, []any{"message", "info message"}, "info message", "Info level test"},
+		{log.WARN, []any{"message", "warn message"}, "warn message", "Warn level test"},
+		{log.ERROR, []any{"message", "error message"}, "error message", "Error level test"},
+		{log.FATAL, []any{"message", "fatal message"}, "fatal message", "Fatal level test"},
 	}
 
 	for _, tc := range testCases {

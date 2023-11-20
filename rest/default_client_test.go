@@ -185,7 +185,7 @@ func TestDefaultHttpClient_DoRequest_JSON(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		assert.Equal(t, "application/json", r.Header.Get("Content-Type"))
 
-		var data map[string]interface{}
+		var data map[string]any
 		err := json.NewDecoder(r.Body).Decode(&data)
 		assert.NoError(t, err)
 		assert.Equal(t, "value", data["key"])
