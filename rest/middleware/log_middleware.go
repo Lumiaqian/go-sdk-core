@@ -25,7 +25,7 @@ func (m *LogMiddleware) Handle(ctx context.Context, req *http.Request, next rest
 	start := time.Now()
 
 	// log before request
-	m.logger.Log(log.INFO, "request_start", "", "method", req.Method, "url", req.URL.String())
+	m.logger.Log(ctx, log.INFO, "request_start", "", "method", req.Method, "url", req.URL.String())
 
 	// call next
 	resp, err := next(ctx, req)
@@ -37,10 +37,10 @@ func (m *LogMiddleware) Handle(ctx context.Context, req *http.Request, next rest
 		resp.Body = io.NopCloser(bytes.NewBuffer(bodyBytes)) // re-open response body
 
 		// log response
-		m.logger.Log(log.INFO, "response_body", bodyBytes)
+		m.logger.Log(ctx, log.INFO, "response_body", bodyBytes)
 	}
 	// log after request
-	m.logger.Log(log.INFO, "request_end", "", "method", req.Method, "url", req.URL.String(), "duration", time.Since(start).String())
+	m.logger.Log(ctx, log.INFO, "request_end", "", "method", req.Method, "url", req.URL.String(), "duration", time.Since(start).String())
 
 	return resp, err
 }

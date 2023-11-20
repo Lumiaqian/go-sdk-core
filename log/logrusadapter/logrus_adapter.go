@@ -1,6 +1,8 @@
 package logrusadapter
 
 import (
+	"context"
+
 	"github.com/Lumiaqian/go-sdk-core/log"
 
 	"github.com/sirupsen/logrus"
@@ -14,7 +16,7 @@ func NewLogrusAdapter(logrusLogger *logrus.Logger) log.Logger {
 	return &LogrusAdapter{logrusLogger: logrusLogger}
 }
 
-func (a *LogrusAdapter) Log(level log.Level, keyvals ...interface{}) error {
+func (a *LogrusAdapter) Log(ctx context.Context, level log.Level, keyvals ...interface{}) error {
 	var (
 		logrusLevel logrus.Level
 		fields      logrus.Fields = make(map[string]interface{})

@@ -1,5 +1,10 @@
 package log
 
+import (
+	"context"
+	"os"
+)
+
 type Level int
 
 const (
@@ -11,7 +16,7 @@ const (
 )
 
 type Logger interface {
-	Log(level Level, keyvals ...interface{}) error
+	Log(ctx context.Context, level Level, keyvals ...interface{}) error
 }
 
 type LogHelper struct {
@@ -24,18 +29,23 @@ func NewLogHelper(logger Logger) *LogHelper {
 	}
 }
 
-func (l *LogHelper) Debug(keyvals ...interface{}) {
-	l.logger.Log(DEBUG, keyvals...)
+func (l *LogHelper) Debug(ctx context.Context, keyvals ...interface{}) {
+	l.logger.Log(ctx, DEBUG, keyvals...)
 }
 
-func (l *LogHelper) Info(keyvals ...interface{}) {
-	l.logger.Log(INFO, keyvals...)
+func (l *LogHelper) Info(ctx context.Context, keyvals ...interface{}) {
+	l.logger.Log(ctx, INFO, keyvals...)
 }
 
-func (l *LogHelper) Warn(keyvals ...interface{}) {
-	l.logger.Log(WARN, keyvals...)
+func (l *LogHelper) Warn(ctx context.Context, keyvals ...interface{}) {
+	l.logger.Log(ctx, WARN, keyvals...)
 }
 
-func (l *LogHelper) Error(keyvals ...interface{}) {
-	l.logger.Log(ERROR, keyvals...)
+func (l *LogHelper) Error(ctx context.Context, keyvals ...interface{}) {
+	l.logger.Log(ctx, ERROR, keyvals...)
+}
+
+func (l *LogHelper) Fatal(ctx context.Context, keyvals ...interface{}) {
+	l.logger.Log(ctx, FATAL, keyvals...)
+	os.Exit(1)
 }

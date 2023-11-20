@@ -2,6 +2,7 @@ package logrusadapter
 
 import (
 	"bytes"
+	"context"
 	"testing"
 
 	"github.com/Lumiaqian/go-sdk-core/log"
@@ -37,7 +38,7 @@ func TestLogrusAdapter_Log(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.message, func(t *testing.T) {
 			buf.Reset()
-			err := adapter.Log(tc.level, tc.keyvals...)
+			err := adapter.Log(context.Background(), tc.level, tc.keyvals...)
 			assert.NoError(t, err)
 			if tc.expected != "" {
 				assert.Contains(t, buf.String(), tc.expected)
@@ -48,14 +49,14 @@ func TestLogrusAdapter_Log(t *testing.T) {
 	// Test invalid key (non-string key)
 	t.Run("Invalid key", func(t *testing.T) {
 		buf.Reset()
-		adapter.Log(log.INFO, 123, "invalid key")
+		adapter.Log(context.Background(), log.INFO, 123, "invalid key")
 		assert.NotContains(t, buf.String(), "invalid key")
 	})
 
 	// Test odd number of keyvals
 	t.Run("Odd keyvals", func(t *testing.T) {
 		buf.Reset()
-		adapter.Log(log.INFO, "odd", "number", "of", "keyvals", "key")
+		adapter.Log(context.Background(), log.INFO, "odd", "number", "of", "keyvals", "key")
 		assert.Contains(t, buf.String(), "\"key\":\"\"") // Last key has empty value
 		assert.Contains(t, buf.String(), "\"odd\":\"number\"")
 		assert.Contains(t, buf.String(), "\"of\":\"keyvals\"")
