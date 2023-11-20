@@ -16,7 +16,7 @@ func NewLogrusAdapter(logrusLogger *logrus.Logger) log.Logger {
 	return &LogrusAdapter{logrusLogger: logrusLogger}
 }
 
-func (a *LogrusAdapter) Log(ctx context.Context, level log.Level, keyvals ...interface{}) error {
+func (a *LogrusAdapter) Log(ctx context.Context, level log.Level, keyvals ...interface{}) {
 	var (
 		logrusLevel logrus.Level
 		fields      logrus.Fields = make(map[string]interface{})
@@ -39,11 +39,11 @@ func (a *LogrusAdapter) Log(ctx context.Context, level log.Level, keyvals ...int
 	}
 
 	if logrusLevel > a.logrusLogger.Level {
-		return nil
+		return
 	}
 
 	if len(keyvals) == 0 {
-		return nil
+		return
 	}
 	if len(keyvals)%2 != 0 {
 		keyvals = append(keyvals, "")
@@ -65,5 +65,4 @@ func (a *LogrusAdapter) Log(ctx context.Context, level log.Level, keyvals ...int
 	} else {
 		a.logrusLogger.Log(logrusLevel, msg)
 	}
-	return nil
 }

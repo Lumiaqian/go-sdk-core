@@ -38,8 +38,7 @@ func TestLogrusAdapter_Log(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.message, func(t *testing.T) {
 			buf.Reset()
-			err := adapter.Log(context.Background(), tc.level, tc.keyvals...)
-			assert.NoError(t, err)
+			adapter.Log(context.Background(), tc.level, tc.keyvals...)
 			if tc.expected != "" {
 				assert.Contains(t, buf.String(), tc.expected)
 			}

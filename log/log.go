@@ -16,7 +16,7 @@ const (
 )
 
 type Logger interface {
-	Log(ctx context.Context, level Level, keyvals ...interface{}) error
+	Log(ctx context.Context, level Level, keyvals ...interface{})
 }
 
 type LogHelper struct {
@@ -27,6 +27,10 @@ func NewLogHelper(logger Logger) *LogHelper {
 	return &LogHelper{
 		logger: logger,
 	}
+}
+
+func (l *LogHelper) Log(ctx context.Context, level Level, keyvals ...interface{}) {
+	l.logger.Log(ctx, level, keyvals...)
 }
 
 func (l *LogHelper) Debug(ctx context.Context, keyvals ...interface{}) {
